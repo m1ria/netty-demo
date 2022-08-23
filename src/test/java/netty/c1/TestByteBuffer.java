@@ -32,6 +32,7 @@ public class TestByteBuffer {
                     log.debug("实际字节 {}", (char) b);
                 }
                 buffer.clear();
+                buffer.rewind();
             }
         } catch (IOException e) {
             System.out.println(e);
