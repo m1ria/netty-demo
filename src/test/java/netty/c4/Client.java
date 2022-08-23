@@ -15,7 +15,7 @@ public class Client {
 
     public static void main(String[] args) throws IOException {
         SocketChannel sc = SocketChannel.open();
-        sc.connect(new InetSocketAddress("lockhost", 8000));
+        sc.connect(new InetSocketAddress("localhost", 8000));
         System.out.println("wait... ");
     }
 }
