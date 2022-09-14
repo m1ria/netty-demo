@@ -18,6 +18,6 @@ public class Client {
         SocketChannel sc = SocketChannel.open();
         sc.connect(new InetSocketAddress("localhost", 8000));
         sc.write(Charset.defaultCharset().encode("hehehdada"));
-        System.out.println("wait... ");
+        System.in.read();
     }
 }
