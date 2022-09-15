@@ -1,4 +1,4 @@
-package netty.c1;
+package nio.c1;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -7,7 +7,6 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 
-import static netty.c1.ByteBufferUtil.debugRead;
 
 /**
  * @className: TestByteBuffer

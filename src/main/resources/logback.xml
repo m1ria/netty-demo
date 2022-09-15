@@ -30,7 +30,7 @@
         </triggeringPolicy>
     </appender>
 
-    <logger name="netty" level="DEBUG" additivity="false">
+    <logger name="nio" level="DEBUG" additivity="false">
         <appender-ref ref="STDOUT"/>
     </logger>
     <!-- 日志输出级别 -->

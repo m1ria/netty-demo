@@ -1,4 +1,4 @@
-package netty.c4;
+package nio.c4;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -10,7 +10,7 @@ import java.util.Iterator;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import static netty.c1.ByteBufferUtil.debugAll;
+import static nio.c1.ByteBufferUtil.debugAll;
 
 /**
  * @className: MultiThreadServer
