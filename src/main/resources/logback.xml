@@ -30,11 +30,14 @@
         </triggeringPolicy>
     </appender>
 
+    <logger name="netty" level="DEBUG" additivity="false">
+        <appender-ref ref="STDOUT"/>
+    </logger>
     <logger name="nio" level="DEBUG" additivity="false">
         <appender-ref ref="STDOUT"/>
     </logger>
     <!-- 日志输出级别 -->
-    <root level="ERROR">
+    <root level="error">
         <appender-ref ref="STDOUT"/>
         <appender-ref ref="FILE"/>
     </root>
