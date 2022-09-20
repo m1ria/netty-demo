@@ -30,17 +30,17 @@ public class EventLoopServer {
                 .channel(NioServerSocketChannel.class)
                 .childHandler(new ChannelInitializer<NioSocketChannel>() {
                     @Override
-                    protected void initChannel(NioSocketChannel nioSocketChannel) throws Exception {
+                    protected void initChannel(NioSocketChannel nioSocketChannel) {
                         nioSocketChannel.pipeline().addLast("handler1",new ChannelInboundHandlerAdapter() {
                             @Override
-                            public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
+                            public void channelRead(ChannelHandlerContext ctx, Object msg) {
                                 ByteBuf buf = (ByteBuf) msg;
                                 log.debug(buf.toString(Charset.defaultCharset()));
                                 ctx.fireChannelRead(msg);
                             }
                         }).addLast(group,"handler2",new ChannelInboundHandlerAdapter() {
                             @Override
-                            public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
+                            public void channelRead(ChannelHandlerContext ctx, Object msg) {
                                 ByteBuf buf = (ByteBuf) msg;
                                 log.debug(buf.toString(Charset.defaultCharset()));
                             }
