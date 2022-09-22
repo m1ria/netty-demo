@@ -1,4 +1,4 @@
-package netty.c4;
+package advance.c1;
 
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.AdaptiveRecvByteBufAllocator;
@@ -11,8 +11,6 @@ import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.handler.logging.LogLevel;
 import io.netty.handler.logging.LoggingHandler;
 import lombok.extern.slf4j.Slf4j;
-
-import java.rmi.ServerError;
 
 /**
  * @className: HelloWorldServer
