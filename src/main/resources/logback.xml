@@ -36,6 +36,9 @@
     <logger name="nio" level="DEBUG" additivity="false">
         <appender-ref ref="STDOUT"/>
     </logger>
+    <logger name="advance" level="DEBUG" additivity="false">
+        <appender-ref ref="STDOUT"/>
+    </logger>
     <!-- 日志输出级别 -->
     <root level="error">
         <appender-ref ref="STDOUT"/>
