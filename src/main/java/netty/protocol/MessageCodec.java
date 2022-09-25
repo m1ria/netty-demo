@@ -52,8 +52,8 @@ public class MessageCodec extends ByteToMessageCodec<Message> {
         byteBuf.readBytes(bytes, 0, length);
         ObjectInputStream ois = new ObjectInputStream(new ByteArrayInputStream(bytes));
         Message message = (Message) ois.readObject();
-        log.debug("{}, {}, {}, {},{} ,{}", magicNum, version, serializerType, messageType, sequenceId, length);
-        log.debug("{}", message);
+        log.debug("------{}, {}, {}, {},{} ,{}", magicNum, version, serializerType, messageType, sequenceId, length);
+        log.debug("------{}", message);
         list.add(message);
     }
 }
