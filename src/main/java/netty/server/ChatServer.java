@@ -11,6 +11,8 @@ import io.netty.handler.logging.LogLevel;
 import io.netty.handler.logging.LoggingHandler;
 import lombok.extern.slf4j.Slf4j;
 import netty.protocol.MessageCodec;
+import netty.protocol.MessageCodecSharable;
+import netty.protocol.ProtocolFrameDecedr;
 
 /**
  * @className: ChatServer
@@ -21,6 +23,8 @@ import netty.protocol.MessageCodec;
  */
 @Slf4j
 public class ChatServer {
+    public static final LoggingHandler LOGGING_HANDLER = new LoggingHandler(LogLevel.DEBUG);
+
     public static void main(String[] args) {
         NioEventLoopGroup boss = new NioEventLoopGroup();
         NioEventLoopGroup worker = new NioEventLoopGroup();
@@ -28,12 +32,14 @@ public class ChatServer {
             ServerBootstrap serverBootstrap = new ServerBootstrap();
             serverBootstrap.channel(NioServerSocketChannel.class);
             serverBootstrap.group(boss, worker);
+            LoggingHandler LOGGING_HANDLER = new LoggingHandler(LogLevel.DEBUG);
+            MessageCodecSharable MESSAGE_CODEC = new MessageCodecSharable();
             serverBootstrap.childHandler(new ChannelInitializer<SocketChannel>() {
                 @Override
                 protected void initChannel(SocketChannel socketChannel) {
-                    socketChannel.pipeline().addLast(new LengthFieldBasedFrameDecoder(1024, 12, 4, 0, 0));
-                    socketChannel.pipeline().addLast(new LoggingHandler(LogLevel.DEBUG));
-                    socketChannel.pipeline().addLast(new MessageCodec());
+                    socketChannel.pipeline().addLast(new ProtocolFrameDecedr());
+                    socketChannel.pipeline().addLast(LOGGING_HANDLER);
+                    socketChannel.pipeline().addLast(MESSAGE_CODEC);
                 }
             });
             ChannelFuture channelFuture = serverBootstrap.bind(8002).sync();

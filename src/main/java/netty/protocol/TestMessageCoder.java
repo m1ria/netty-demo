@@ -20,7 +20,7 @@ public class TestMessageCoder {
     public static void main(String[] args) throws Exception {
         EmbeddedChannel channel = new EmbeddedChannel(
                 new LoggingHandler(),
-                new LengthFieldBasedFrameDecoder(1024, 12, 4, 0, 0),
+                new ProtocolFrameDecedr(),
                 new MessageCodec()
         );
         //encode

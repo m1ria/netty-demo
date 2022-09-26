@@ -1,8 +1,9 @@
 package netty.protocol;
 
 import io.netty.buffer.ByteBuf;
+import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
-import io.netty.handler.codec.ByteToMessageCodec;
+import io.netty.handler.codec.MessageToMessageCodec;
 import lombok.extern.slf4j.Slf4j;
 import netty.message.Message;
 
@@ -13,17 +14,18 @@ import java.io.ObjectOutputStream;
 import java.util.List;
 
 /**
- * @className: MessageCodec
- * @description: TODO
+ * @className: MessageCodecSharable
+ * @description: sharable
  * @author: m1ria
- * @date: 2022/9/24 22:20
+ * @date: 2022/9/26 3:47
  * @version: 1.0
  */
 @Slf4j
-public class MessageCodec extends ByteToMessageCodec<Message> {
-
+@ChannelHandler.Sharable
+public class MessageCodecSharable extends MessageToMessageCodec<ByteBuf, Message> {
     @Override
-    protected void encode(ChannelHandlerContext channelHandlerContext, Message message, ByteBuf byteBuf) throws Exception {
+    protected void encode(ChannelHandlerContext channelHandlerContext, Message message, List<Object> list) throws Exception {
+        ByteBuf byteBuf = channelHandlerContext.alloc().buffer();
         byteBuf.writeBytes(new byte[]{1, 2, 3, 4});
         byteBuf.writeByte(1);
         byteBuf.writeByte(0);
@@ -36,6 +38,7 @@ public class MessageCodec extends ByteToMessageCodec<Message> {
         byte[] bytes = bos.toByteArray();
         byteBuf.writeInt(bytes.length);
         byteBuf.writeBytes(bytes);
+        list.add(byteBuf);
     }
 
     @Override
