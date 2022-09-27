@@ -6,13 +6,14 @@ import io.netty.channel.ChannelInitializer;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
-import io.netty.handler.codec.LengthFieldBasedFrameDecoder;
 import io.netty.handler.logging.LogLevel;
 import io.netty.handler.logging.LoggingHandler;
 import lombok.extern.slf4j.Slf4j;
-import netty.protocol.MessageCodec;
 import netty.protocol.MessageCodecSharable;
 import netty.protocol.ProtocolFrameDecedr;
+import netty.server.handler.ChatRequestMessageHandler;
+import netty.server.handler.GroupCreateRequestMessageHandler;
+import netty.server.handler.LoginRequestMessageHandler;
 
 /**
  * @className: ChatServer
@@ -23,7 +24,6 @@ import netty.protocol.ProtocolFrameDecedr;
  */
 @Slf4j
 public class ChatServer {
-    public static final LoggingHandler LOGGING_HANDLER = new LoggingHandler(LogLevel.DEBUG);
 
     public static void main(String[] args) {
         NioEventLoopGroup boss = new NioEventLoopGroup();
@@ -34,12 +34,18 @@ public class ChatServer {
             serverBootstrap.group(boss, worker);
             LoggingHandler LOGGING_HANDLER = new LoggingHandler(LogLevel.DEBUG);
             MessageCodecSharable MESSAGE_CODEC = new MessageCodecSharable();
+            LoginRequestMessageHandler LOGIN_HANDLER = new LoginRequestMessageHandler();
+            ChatRequestMessageHandler CHAT_HANDLER = new ChatRequestMessageHandler();
+            GroupCreateRequestMessageHandler GROUP_CREATE_HANDLER = new GroupCreateRequestMessageHandler();
             serverBootstrap.childHandler(new ChannelInitializer<SocketChannel>() {
                 @Override
                 protected void initChannel(SocketChannel socketChannel) {
                     socketChannel.pipeline().addLast(new ProtocolFrameDecedr());
                     socketChannel.pipeline().addLast(LOGGING_HANDLER);
                     socketChannel.pipeline().addLast(MESSAGE_CODEC);
+                    socketChannel.pipeline().addLast(LOGIN_HANDLER);
+                    socketChannel.pipeline().addLast(CHAT_HANDLER);
+                    socketChannel.pipeline().addLast(GROUP_CREATE_HANDLER);
                 }
             });
             ChannelFuture channelFuture = serverBootstrap.bind(8002).sync();
@@ -51,4 +57,5 @@ public class ChatServer {
             worker.shutdownGracefully();
         }
     }
+
 }
