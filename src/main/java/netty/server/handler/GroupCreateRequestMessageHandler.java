@@ -32,7 +32,7 @@ public class GroupCreateRequestMessageHandler extends SimpleChannelInboundHandle
         Group group = groupSession.createGroup(groupName, member);
         if (group != null) {
             ctx.writeAndFlush(new GroupCreateResponseMessage(true, "创建成功"));
-            List<Channel> channels = groupSession.getMembersChannel(groupName);
+            Set<Channel> channels = groupSession.getMembersChannel(groupName);
             for (Channel channel : channels) {
                 channel.writeAndFlush(new GroupCreateResponseMessage(true,   "你已加入"+groupName));
             }

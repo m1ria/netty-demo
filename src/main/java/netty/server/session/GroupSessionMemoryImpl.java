@@ -19,6 +19,11 @@ public class GroupSessionMemoryImpl implements GroupSession {
     }
 
     @Override
+    public Group findGroup(String name) {
+        return groupMap.get(name);
+    }
+
+    @Override
     public Group joinMember(String name, String member) {
         return groupMap.computeIfPresent(name, (key, value) -> {
             value.getMembers().add(member);
@@ -45,10 +50,10 @@ public class GroupSessionMemoryImpl implements GroupSession {
     }
 
     @Override
-    public List<Channel> getMembersChannel(String name) {
+    public Set<Channel> getMembersChannel(String name) {
         return getMembers(name).stream()
                 .map(member -> SessionFactory.getSession().getChannel(member))
                 .filter(Objects::nonNull)
-                .collect(Collectors.toList());
+                .collect(Collectors.toSet());
     }
 }

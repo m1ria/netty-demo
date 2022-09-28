@@ -19,6 +19,13 @@ public interface GroupSession {
     Group createGroup(String name, Set<String> members);
 
     /**
+     * 查询一个聊天组是否存在，不存在返回null
+     * @param name 组名
+     * @return 成功时返回组对象, 失败返回 null
+     */
+    Group findGroup(String name);
+
+    /**
      * 加入聊天组
      * @param name 组名
      * @param member 成员名
@@ -53,5 +60,5 @@ public interface GroupSession {
      * @param name 组名
      * @return 成员 channel 集合
      */
-    List<Channel> getMembersChannel(String name);
+    Set<Channel> getMembersChannel(String name);
 }
