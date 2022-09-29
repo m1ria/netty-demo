@@ -5,12 +5,9 @@ import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.MessageToMessageCodec;
 import lombok.extern.slf4j.Slf4j;
+import netty.config.Config;
 import netty.message.Message;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.util.List;
 
 /**
@@ -28,14 +25,12 @@ public class MessageCodecSharable extends MessageToMessageCodec<ByteBuf, Message
         ByteBuf byteBuf = channelHandlerContext.alloc().buffer();
         byteBuf.writeBytes(new byte[]{1, 2, 3, 4});
         byteBuf.writeByte(1);
-        byteBuf.writeByte(0);
+        //字节序列化的方式
+        byteBuf.writeByte(Config.getSerializerAlgorithm().ordinal());
         byteBuf.writeByte(message.getMessageType());
         byteBuf.writeInt(message.getSequenceId());
         byteBuf.writeByte(0xff);
-        ByteArrayOutputStream bos = new ByteArrayOutputStream();
-        ObjectOutputStream oos = new ObjectOutputStream(bos);
-        oos.writeObject(message);
-        byte[] bytes = bos.toByteArray();
+        byte[] bytes = Config.getSerializerAlgorithm().serializer(message);
         byteBuf.writeInt(bytes.length);
         byteBuf.writeBytes(bytes);
         list.add(byteBuf);
@@ -52,10 +47,11 @@ public class MessageCodecSharable extends MessageToMessageCodec<ByteBuf, Message
         int length = byteBuf.readInt();
         byte[] bytes = new byte[length];
         byteBuf.readBytes(bytes, 0, length);
-        ObjectInputStream ois = new ObjectInputStream(new ByteArrayInputStream(bytes));
-        Message message = (Message) ois.readObject();
-        log.debug("------{}, {}, {}, {},{} ,{}", magicNum, version, serializerType, messageType, sequenceId, length);
-        log.debug("------{}", message);
-        list.add(message);
+        Serializer.Algorithm algorithm = Serializer.Algorithm.values()[serializerType];
+        Class<? extends Message> messageClass = Message.getMessageClass(messageType);
+        Object deserializer = algorithm.deserializer(messageClass, bytes);
+//        log.debug("------{}, {}, {}, {},{} ,{}", magicNum, version, serializerType, messageType, sequenceId, length);
+//        log.debug("------{}", message);
+        list.add(deserializer);
     }
 }

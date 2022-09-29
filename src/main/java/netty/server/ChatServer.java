@@ -42,17 +42,19 @@ public class ChatServer {
             GroupCreateRequestMessageHandler GROUP_CREATE_HANDLER = new GroupCreateRequestMessageHandler();
             GroupMembersRequestMessageHandler GROUP_MEMBERS_HANDLER = new GroupMembersRequestMessageHandler();
             GroupChatRequestMessageHandler GROUP_CHAT_HANDLER = new GroupChatRequestMessageHandler();
+            GroupJoinRequestMessageHandler GROUP_JOIN_HANDLER = new GroupJoinRequestMessageHandler();
+            GroupQuitRequestMessageHandler GROUP_QUIT_HANDLER = new GroupQuitRequestMessageHandler();
             QuiteHandler QUITE_HANDLER = new QuiteHandler();
             serverBootstrap.childHandler(new ChannelInitializer<SocketChannel>() {
                 @Override
                 protected void initChannel(SocketChannel sc) {
-                    sc.pipeline().addLast(new IdleStateHandler(5, 0, 0));
+                    sc.pipeline().addLast(new IdleStateHandler(5000, 0, 0));
                     sc.pipeline().addLast(new ChannelDuplexHandler(){
                         @Override
                         public void userEventTriggered(ChannelHandlerContext ctx, Object evt) throws Exception {
                             IdleStateEvent event = (IdleStateEvent) evt;
                             if (event.state() == IdleState.READER_IDLE) {
-                                log.debug("已经5s没有数据了。。。");
+                                log.debug("已经5000s没有数据了。。。");
                             }
                         }
                     });
@@ -64,6 +66,8 @@ public class ChatServer {
                     sc.pipeline().addLast(GROUP_CREATE_HANDLER);
                     sc.pipeline().addLast(GROUP_CHAT_HANDLER);
                     sc.pipeline().addLast(GROUP_MEMBERS_HANDLER);
+                    sc.pipeline().addLast(GROUP_JOIN_HANDLER);
+                    sc.pipeline().addLast(GROUP_QUIT_HANDLER);
                     sc.pipeline().addLast(QUITE_HANDLER);
                 }
             });
