@@ -10,9 +10,9 @@ import java.util.Set;
 @ToString(callSuper = true)
 public class GroupMembersResponseMessage extends Message {
 
-    private Set<Channel> members;
+    private Set<String> members;
 
-    public GroupMembersResponseMessage(Set<Channel> members) {
+    public GroupMembersResponseMessage(Set<String> members) {
         this.members = members;
     }
 

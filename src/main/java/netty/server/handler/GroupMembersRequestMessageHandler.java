@@ -25,11 +25,8 @@ public class GroupMembersRequestMessageHandler extends SimpleChannelInboundHandl
         GroupSession groupSession = GroupSessionFactory.getGroupSession();
         if (groupSession.findGroup(msg.getGroupName()) != null) {
             String groupName = msg.getGroupName();
-            Set<Channel> channels = groupSession.getMembersChannel(groupName);
-            ctx.writeAndFlush(new GroupMembersResponseMessage(channels));
-        } else {
-            ctx.writeAndFlush(new GroupMembersResponseMessage(null));
+            Set<String> members = groupSession.getMembers(groupName);
+            ctx.writeAndFlush(new GroupMembersResponseMessage(members));
         }
-
     }
 }

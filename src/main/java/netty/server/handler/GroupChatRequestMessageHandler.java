@@ -24,7 +24,7 @@ public class GroupChatRequestMessageHandler extends SimpleChannelInboundHandler<
     protected void channelRead0(ChannelHandlerContext ctx, GroupChatRequestMessage msg) throws Exception {
         Set<Channel> channels = GroupSessionFactory.getGroupSession().getMembersChannel(msg.getGroupName());
         for (Channel channel : channels) {
-            ctx.writeAndFlush(new GroupChatResponseMessage(msg.getFrom(), msg.getContent()));
+            channel.writeAndFlush(new GroupChatResponseMessage(msg.getFrom(), msg.getContent()));
         }
     }
 }
